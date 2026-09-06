@@ -221,9 +221,9 @@ write_csv(outlier_proportions, o_fn)
 # switching between tasks RTs on ST vs MT ---------------------------------
 
 # now I want to get only the first and second RTs from ST and MT switch trials, and average across those
-task_load_rts <- grp_data %>% filter(ses == 4 & switch == 1 & rt < max_cutoff & rt > min_cutoff) %>%
+task_load_rts <- grp_data %>% filter(ses == 4 & switch == 1 & start_rt < max_cutoff & start_rt > min_cutoff) %>%
  filter(frst_tsk_resp | scnd_tsk_resp) %>%
-  select(sub, ses, t, block, context, door, rt, frst_tsk_resp, scnd_tsk_resp) %>%
+  select(sub, ses, t, block, context, door, start_rt, frst_tsk_resp, scnd_tsk_resp) %>%
   pivot_longer(
     cols = c(frst_tsk_resp, scnd_tsk_resp),
     names_to = "resp_type",
@@ -232,7 +232,7 @@ task_load_rts <- grp_data %>% filter(ses == 4 & switch == 1 & rt < max_cutoff & 
   filter(resp_num == 1)  %>%
   pivot_wider(
     names_from = resp_type,
-    values_from = rt
+    values_from = start_rt
   ) %>%
   mutate(
     scnd_tsk_resp = lead(scnd_tsk_resp)
