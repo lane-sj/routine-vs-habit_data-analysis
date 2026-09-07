@@ -52,7 +52,7 @@ trsf_partial |>
     x = -0.3,
     y = -1.2,
     fontface = "italic",
-    label = "r = -0.415, p < 0.001"
+    label = "r = -.415, p < .001"
   ) +
   labs(
     x = "Transition Entropy | All Errors",
@@ -87,7 +87,7 @@ reclicks_x_errors |>
     x = -2.2,
     y = 1.4,
     fontface = "italic",
-    label = "r = 0.053"
+    label = "r = .053"
   ) +
   labs(
     y = "Reclicks | TE",
