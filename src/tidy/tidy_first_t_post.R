@@ -22,7 +22,7 @@ switch_trl <- read_csv(
   na = c("", "NA")
 )
 
-split_by_block <-  read_csv(
+split_by_block <- read_csv(
   "split_by_block.csv",
   na = c("", "NA")
 )
@@ -30,4 +30,4 @@ split_by_block <-  read_csv(
 
 # prepare for linear model ------------------------------------------------
 
-
+#edit: need to discuss with kel
