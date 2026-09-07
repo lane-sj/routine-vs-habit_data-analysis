@@ -237,3 +237,34 @@ with(df1_trsf, t.test(tj_st_log, tj_mt_log, paired = T))
 ge_sixfive <- with(df1, t.test(general_errors_mean_st, general_errors_mean_mt, paired = T))
 tidy(ge_sixfive)
 #still sig
+
+
+# summary stats agnostic of st or mt --------------------------------------
+
+#reclicks
+outlierless |>
+  filter(sub != 30, ses == 4, switch == 1) |>
+  summarise(
+    reclicks = mean(reclicks_mean),
+    relcicks_sd = sd(reclicks_mean),
+    rt = mean(rt_mean),
+    rt_sd = sd(rt_mean),
+    task_jumps = mean(task_jumps_mean),
+    task_sd = sd(task_jumps_mean),
+    gen_errors = mean(general_errors_mean),
+    general_errors_sd = sd(general_errors_mean)
+  )
+
+#te
+outlierless |>
+  filter(ses == 4, switch == 0) |>
+  summarise(
+    TE_mean = mean(TE),
+    TE_sd = sd(TE),
+    rt = mean(rt_mean),
+    rt_sd = sd(rt_mean),
+    task_jumps = mean(task_jumps_mean),
+    task_sd = sd(task_jumps_mean),
+    gen_errors = mean(general_errors_mean),
+    general_errors_sd = sd(general_errors_mean)
+  )
