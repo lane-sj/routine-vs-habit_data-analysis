@@ -30,35 +30,23 @@ no_thirty <- perform_dat |>
 
 # TE and Reclicks ---------------------------------------------------------
 
-#rt
-rtcost_mod <- lm(RT_cost ~ TE + reclicks_mean, data = perform_dat)
-summary(rtcost_mod)
-#ns
-
 rtcost_trsf_mod <- lm(RT_cost ~ TE + sqrt(reclicks_mean), data = perform_dat)
 summary(rtcost_trsf_mod)
-#ns
-
-#task jumps (our accuracy proxy)
-tjcost_mod <- lm(tj_cost ~ TE + reclicks_mean, data = perform_dat)
-summary(tjcost_mod)
 #ns
 
 tjcost_trsf_mod <- lm(tj_cost ~ TE + sqrt(reclicks_mean), data = perform_dat)
 summary(tjcost_trsf_mod)
 #ns
 
-
 # TE, reclicks and general errors ----------------------------------------
 
-rtcost_trsf_thirtyless <- lm(RT_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat_mt)
-summary(rtcost_trsf_thirtyless)
-#ns overall, sig on reclicks as predictor
+rtcost_trsf <- lm(RT_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = perform_dat)
+summary(rtcost_trsf)
+#ns overall, sig on reclicks as predictor (but only without sub 30)
 
-tjcost_trsf_mod_thirtyless <- lm(tj_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = no_thirty)
-summary(tjcost_trsf_mod_thirtyless)
-#errors sig - errors sig predict task jumping
-#i.e they were a bit lost.
+tjcost_trsf <- lm(tj_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = perform_dat)
+summary(tjcost_trsf)
+#ns
 
 
 # correlations ------------------------------------------------------------
@@ -67,7 +55,7 @@ summary(tjcost_trsf_mod_thirtyless)
 
   #reclicks
 
-with(no_thirty, cor(reclicks_mean, RT_cost))
+with(perform_dat, cor(reclicks_mean, RT_cost))
 
   #te
 
@@ -81,7 +69,7 @@ with(perform_dat, cor(ge_stay, RT_cost))
 
   #reclicks
 
-with(no_thirty, cor(reclicks_mean, tj_cost))
+with(perform_dat, cor(reclicks_mean, tj_cost))
 
   #te
 

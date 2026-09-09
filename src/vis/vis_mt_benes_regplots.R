@@ -21,10 +21,12 @@ perform_dat <- read_csv(
 
 #reclicks
 perform_dat |>
-  filter(sub != 30) |>
+  mutate(
+    RT_cost = RT_cost * 1000
+  ) |>
   ggplot(aes(x = sqrt(reclicks_mean), y = RT_cost)) +
   geom_point(shape = 21, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
-  geom_smooth(method = 'lm', formula = 'y ~ x', se = T, colour = "#1F78B4FF", fill = "#1F78B4FF",  fullrange = TRUE) +
+  geom_smooth(method = 'lm', formula = 'y ~ x', se = F, colour = "#1F78B4FF") +
   scale_x_continuous(limits = c(0, 2.5)) +
   plot_style() +
   theme(
@@ -37,13 +39,13 @@ perform_dat |>
   annotate(
     geom = "text",
     size = 4.3,
-    x = 0.55,
-    y = -0.18,
+    x = 0.4,
+    y = -180,
     fontface = "italic",
-    label = "r = -.246, p = .049"
+    label = "r = -.171"
   ) +
   labs(
-    y = "RT Cost (MT - ST)",
+    y = "RT Cost (ms; MT - ST)",
     x = "Mean Reclicks"
   )
 
@@ -133,7 +135,6 @@ ggsave(
 
 #reclicks
 perform_dat |>
-  filter(sub != 30) |>
   ggplot(aes(x = sqrt(reclicks_mean), y = tj_cost)) +
   geom_point(shape = 21, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   geom_smooth(method = 'lm', formula = 'y ~ x', se = F, colour = "#33A02CFF") +
@@ -151,7 +152,7 @@ perform_dat |>
     x = 0.4,
     y = -1.6,
     fontface = "italic",
-    label = "r = -.087"
+    label = "r = -.010"
   ) +
   labs(
     y = "Task Jump Cost (MT - ST)",
