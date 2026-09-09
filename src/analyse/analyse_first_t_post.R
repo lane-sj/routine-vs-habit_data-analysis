@@ -23,7 +23,7 @@ switch_trl <- read_csv(
 )
 
 # quick_tidy ---------------------------------------------------------
-remove <- c(8, 9, 11, 13, 22, 25, 28, 51, 61, 73, 76, 85)
+#remove <- c(8, 9, 11, 13, 22, 25, 28, 51, 61, 73, 76, 85)
 
 just_sens <- c(13, 22, 25, 28, 51, 61, 73, 76, 85)
 #
@@ -124,11 +124,6 @@ output <- psyci(
 #sig with outliers
 
 #ns with n_nc and sens taken out
-
-#lets also try one with only the sens peeps taken out
-#ns
-
-#what about with transforms?
 
 
 # linear model time -------------------------------------------------------
