@@ -28,7 +28,7 @@ graph_ts <- averages |>
     block = factor(block, c("st", "mt"), c("ST", "MT"))
   ) |>
   summarise(
-    rt_mean = mean(rt_mean),
+    rt_mean = mean(rt_mean) * 1000,
     tj_mean = mean(task_jumps_mean),
     ges_mean = mean(general_errors_mean),
   )
@@ -58,13 +58,10 @@ graph_ts |>
   ) +
   stat_summary(fun = "mean", geom = "point", fill = "black", colour = "black", size = 2.5) +
   stat_summary(geom = "errorbar", fun.data = mean_cl_boot, width = 0, size = 1.3) +
-  geom_signif(
-    data = graph_ts, comparisons = list(c("ST","MT")),
-    annotation = "***", margin_top = 0.1, size = 1.2, textsize = 10, vjust = 0.5
-  ) +
   geom_line(aes(group = sub), alpha = 0.4, colour = "grey", position = position_dodge(width = 0.5)) +
   scale_fill_manual(values = rt_pal_fill) +
   scale_colour_manual(values = rt_pal_colour) +
+  ylim(c(0, 1000)) +
   plot_style() +
   theme(
     axis.title = element_text(face = "bold"),
