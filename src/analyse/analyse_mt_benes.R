@@ -20,6 +20,11 @@ perform_dat <- read_csv(
   na = c("", "NA")
 )
 
+perform_dat_mt <- read_csv(
+  "perform_dat_mt_errors.csv",
+  na = c("", "NA")
+)
+
 no_thirty <- perform_dat |>
   filter(sub != 30)
 
@@ -46,7 +51,7 @@ summary(tjcost_trsf_mod)
 
 # TE, reclicks and general errors ----------------------------------------
 
-rtcost_trsf_thirtyless <- lm(RT_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = no_thirty)
+rtcost_trsf_thirtyless <- lm(RT_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat_mt)
 summary(rtcost_trsf_thirtyless)
 #ns overall, sig on reclicks as predictor
 
