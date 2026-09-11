@@ -220,44 +220,27 @@ write_csv(outlier_proportions, o_fn)
 
 # switching between tasks RTs on ST vs MT ---------------------------------
 
-# now I want to get only the first and second RTs from ST and MT switch trials, and average across those
-task_load_rts <- grp_data %>% filter(ses == 4 & switch == 1 & start_rt < max_cutoff & start_rt > min_cutoff) %>%
- filter(frst_tsk_resp | scnd_tsk_resp) %>%
-  select(sub, ses, t, block, context, door, start_rt, frst_tsk_resp, scnd_tsk_resp) %>%
-  pivot_longer(
-    cols = c(frst_tsk_resp, scnd_tsk_resp),
-    names_to = "resp_type",
-    values_to = "resp_num"
-  ) %>%
-  filter(resp_num == 1)  %>%
-  pivot_wider(
-    names_from = resp_type,
-    values_from = start_rt
-  ) %>%
-  mutate(
-    scnd_tsk_resp = lead(scnd_tsk_resp)
-  ) %>%
+# now I want to get only the first correct task RTs from ST and MT on stay vs switch trials, and average across those
+task_load_rts <- grp_data %>%
+  mutate(rt = start_rt + press_duration) %>%
+  filter(ses == 4 & rt < max_cutoff & rt > min_cutoff) %>%
+  filter(as.logical(frst_tsk_resp)) %>%
+  select(sub, ses, t, block, context, door, switch, rt) %>%
   drop_na() %>%
-  arrange(sub, ses, t, block, context) %>%
-  group_by(sub, ses, block, context) %>%
-    mutate(mean_frst_rt = mean(frst_tsk_resp, na.rm = TRUE),
-         sd_frst_rt = sd(frst_tsk_resp, na.rm = TRUE),
+  arrange(sub, ses, t, block, context, switch) %>%
+  group_by(sub, ses, block, context, switch) %>%
+  mutate(mean_frst_rt = mean(rt, na.rm = TRUE),
+         sd_frst_rt = sd(rt, na.rm = TRUE),
          frst_rt_cut_off = mean_frst_rt + sd_cut * sd_frst_rt,
-         mean_scnd_rt = mean(scnd_tsk_resp, na.rm = TRUE),
-         sd_scnd_rt = sd(scnd_tsk_resp, na.rm = TRUE),
-         scnd_rt_cut_off = mean_scnd_rt + sd_cut * sd_scnd_rt,
-         frst_tsk_resp = ifelse(frst_tsk_resp > frst_rt_cut_off, NA, frst_tsk_resp),
-         scnd_tsk_resp = ifelse(scnd_tsk_resp > scnd_rt_cut_off, NA, scnd_tsk_resp)
+         rt = ifelse(rt > frst_rt_cut_off, NA, rt)
   ) %>%
   ungroup() %>%
-  summarise(.by = c(sub, ses, t, block, context),
-            n_frst_rt_outliers = sum(is.na(frst_tsk_resp)),
-            frst_rt = mean(frst_tsk_resp, na.rm = TRUE),
-            n_scnd_rt_outliers = sum(is.na(scnd_tsk_resp)),
-            scnd_rt = mean(scnd_tsk_resp, na.rm = TRUE),
+  summarise(.by = c(sub, ses, t, block, switch, context),
+            n_frst_rt_outliers = sum(is.na(rt)),
+            frst_rt = mean(rt, na.rm = TRUE),
             N = n())
 
-fnl <- file.path(project_path, "res", paste(paste(sv_name, "sw_frst-scnd_stvmt_trl", sep = "_"), ".csv", sep = ""))
+fnl <- file.path(project_path, "res", paste(paste(sv_name, "sw_frst-swvst_stvmt_trl", sep = "_"), ".csv", sep = ""))
 write_csv(task_load_rts, fnl)
 
 # now calculate the proportion of outliers removed for each
@@ -265,22 +248,18 @@ write_csv(task_load_rts, fnl)
 outlier_proportions_sw_rts <- task_load_rts %>%
   group_by(sub) %>%
   summarise(
-    prop_frst_rt_outliers = sum(n_frst_rt_outliers) / sum(N),
-    prop_scnd_rt_outliers = sum(n_scnd_rt_outliers) / sum(N)
+    prop_frst_rt_outliers = sum(n_frst_rt_outliers) / sum(N)
   )
-o_fn <- file.path(project_path, "res", paste(paste(sv_name, "outliers_frstvscnd", sep = "_"), ".csv", sep = ""))
+o_fn <- file.path(project_path, "res", paste(paste(sv_name, "outliers_frst", sep = "_"), ".csv", sep = ""))
 write_csv(outlier_proportions_sw_rts, o_fn)
 
 # now get the summary data for participants. We'll have first vs scnd as dvs, and sub, and block as the grouping variables
 
 task_rsp_rt_sum <-  task_load_rts %>%
-  summarise(.by = c(sub, block, context),
-            frst_rt = mean(frst_rt, na.rm = TRUE),
-            scnd_rt = mean(scnd_rt, na.rm = TRUE)) %>%
-   summarise(.by = c(sub, block),
-             frst_rt = mean(frst_rt, na.rm = TRUE),
-             scnd_rt = mean(scnd_rt, na.rm = TRUE)) %>%
-  pivot_longer(cols = c(frst_rt, scnd_rt), names_to = "resp_type", values_to = "mean_rt")
+  summarise(.by = c(sub, block, switch, context),
+            frst_rt = mean(frst_rt, na.rm = TRUE)) %>%
+  summarise(.by = c(sub, block, switch),
+            mean_rt = mean(frst_rt, na.rm = TRUE))
 # now save the summary data of response times for first vs second responses on switch trials
 fnl <- file.path(project_path, "res", paste(paste(sv_name, "sw_frst-scnd_stvmt_avg", sep = "_"), ".csv", sep = ""))
 write_csv(task_rsp_rt_sum, fnl)
