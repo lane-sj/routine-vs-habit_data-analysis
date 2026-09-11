@@ -12,20 +12,21 @@ library(broom)
 
 setwd("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/res")
 
-switch_avg <- read_csv(
+switch_stay_avg <- read_csv(
   "routine_vs_habit_sw_frst-scnd_stvmt_avg.csv",
   na = c("", "NA")
 )
 
-switch_trl <- read_csv(
+switch_stay_trl <- read_csv(
   "routine_vs_habit_sw_frst-scnd_stvmt_trl.csv",
   na = c("", "NA")
 )
 
+just_sens <- c(13, 22, 25, 28, 51, 61, 73, 76, 85)
+
 # quick_tidy ---------------------------------------------------------
 #remove <- c(8, 9, 11, 13, 22, 25, 28, 51, 61, 73, 76, 85)
 
-just_sens <- c(13, 22, 25, 28, 51, 61, 73, 76, 85)
 #
 # switch <- switch_avg |>
 #   mutate(
@@ -126,10 +127,106 @@ output <- psyci(
 #ns with n_nc and sens taken out
 
 
-# linear model time -------------------------------------------------------
+# what about switch v stay first correct responses -----------------------------
 
 
+#tidy
+
+switch_stay_outless <- switch_stay_avg |>
+  mutate(
+    block = fct_relevel(block, "st", "mt"),
+    switch = factor(switch)
+  ) |>
+  filter(!sub %in% just_sens)
+
+switch_stay_outless_log <- switch_stay_avg |>
+  mutate(
+    block = fct_relevel(block, "st", "mt"),
+    switch = factor(switch),
+    mean_rt = log(mean_rt)
+  ) |>
+  filter(!sub %in% just_sens)
+
+#vis norms - here a log transform suits best
+switch_avg |>
+  ggplot(aes(sample = log(mean_rt))) +
+  geom_qq() +
+  geom_qq_line() +
+  theme_classic() +
+  facet_grid(block ~ switch)
+
+#and vis
+switch_stay_outless_log |>
+  ggplot(aes(x = switch, y = mean_rt, colour = block, shape = block)) +
+  stat_summary(fun = mean, geom = "point", size = 3, aes(group = block)) +
+  stat_summary(fun = mean, geom = "line", aes(group = block)) +
+  theme_classic(base_size = 14)
+
+switch_stay_outless_log |>
+  ggplot(aes(x = block, y = mean_rt, colour = switch, shape = switch)) +
+  stat_summary(fun = mean, geom = "point", size = 3, aes(group = switch)) +
+  stat_summary(fun = mean, geom = "line", aes(group = switch)) +
+  theme_classic(base_size = 14)
+#it appears that switch does not vary by block
+#and stay does vary by block
 
 
+switch_stay_outless_log |>
+  ggplot(aes(x = block, y = mean_rt, fill = switch)) +
+  geom_boxplot() +
+  theme_classic(base_size = 14)
+
+#test
+
+afex_options(emmeans_model = "multivariate")
+
+mod_two <- aov_ez(
+  "sub",
+  "mean_rt",
+  switch_stay_outless_log,
+  within = c("block", "switch")
+)
+                            #st    mt    st   mt
+                            #0     0     1    1
+wth_conts <- list(
+  "mt-st"               = c(-0.5, 0.5, -0.5, 0.5),
+  "switch-stay"         = c(-0.5, -0.5, 0.5, 0.5),
+  "int"                 = c(0.5, -0,5, -0.5, 0.5),
+)
+
+emms_two <- emmeans(mod_two, c("block", "switch"))
+
+cnt_res_two <- contrast(emms_two, conts_two)
+
+#produce simplefx
+switch_by_block <- emmeans(mod_two, ~ switch | block)
+simp_fx_contrasts <- list("block" = c(-1, 1))
+switch_simp_fx <- contrast (switch_by_block, method = simp_fx_contrasts)
 
 
+block_by_switch <- emmeans(mod_two, ~ block | switch)
+block_simp_fx <- contrast(block_by_switch, method = simp_fx_contrasts)
+
+all_fx <- c(cnt_res_two, switch_simp_fx, block_simp_fx)
+family_list = as.list(rep("w", length(all_fx)))
+alphas = 0.05 # because we adjust by contrast
+
+
+p <- 2
+q <- 2
+smr_params <- list(
+  p = p,
+  q = q,
+  n_sim = 100000, # this is also the default
+  seed = 42 # set seed if you want to replicate simulation of smr distribution
+)
+
+output_two <- psyci(
+  model = mod_two,
+  contrast_tables = all_fx,
+  method = "smr",
+  family_list = family_list,
+  within_factors = list("block", "switch"),
+  alpha = alphas,
+  smr_params = smr_params
+)
