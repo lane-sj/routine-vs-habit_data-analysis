@@ -191,42 +191,15 @@ mod_two <- aov_ez(
 wth_conts <- list(
   "mt-st"               = c(-0.5, 0.5, -0.5, 0.5),
   "switch-stay"         = c(-0.5, -0.5, 0.5, 0.5),
-  "int"                 = c(0.5, -0,5, -0.5, 0.5),
+  "int"                 = c(0.5, -0,5, -0.5, 0.5)
 )
 
 emms_two <- emmeans(mod_two, c("block", "switch"))
 
-cnt_res_two <- contrast(emms_two, conts_two)
+cnt_res_two <- contrast(emms_two, wth_conts)
 
 #produce simplefx
-switch_by_block <- emmeans(mod_two, ~ switch | block)
-simp_fx_contrasts <- list("block" = c(-1, 1))
-switch_simp_fx <- contrast (switch_by_block, method = simp_fx_contrasts)
+#following j-k design_analaysis vignette PsyR
 
 
-block_by_switch <- emmeans(mod_two, ~ block | switch)
-block_simp_fx <- contrast(block_by_switch, method = simp_fx_contrasts)
 
-all_fx <- c(cnt_res_two, switch_simp_fx, block_simp_fx)
-family_list = as.list(rep("w", length(all_fx)))
-alphas = 0.05 # because we adjust by contrast
-
-
-p <- 2
-q <- 2
-smr_params <- list(
-  p = p,
-  q = q,
-  n_sim = 100000, # this is also the default
-  seed = 42 # set seed if you want to replicate simulation of smr distribution
-)
-
-output_two <- psyci(
-  model = mod_two,
-  contrast_tables = all_fx,
-  method = "smr",
-  family_list = family_list,
-  within_factors = list("block", "switch"),
-  alpha = alphas,
-  smr_params = smr_params
-)
