@@ -199,7 +199,7 @@ emms_two <- emmeans(mod_two, c("block", "switch"))
 cnt_res_two <- contrast(emms_two, wth_conts)
 
 #produce simplefx
-#following j-k design_analaysis vignette PsyR
+#following
 
 
 
