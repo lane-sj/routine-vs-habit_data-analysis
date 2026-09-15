@@ -48,10 +48,11 @@ switch_stay_outless <- switch_avg |>
     switch = fct_relevel(switch, "Stay", "Switch"),
     block = factor(block),
     block = fct_recode(block, "ST" = "st", "MT" = "mt"),
-    block = fct_relevel(block, "MT", "ST"),
+    block = fct_relevel(block, "ST", "MT"),
   ) |>
   rename(
-    Block = "block"
+    Block = "block",
+    Switch = "switch"
   ) |>
   filter(!sub %in% just_sens)
 
@@ -71,18 +72,22 @@ switch_pal_colour <- pal_colour[c(3, 4)]
 # vis ---------------------------------------------------------------------
 
 switch_stay_outless |>
-  ggplot(aes(x = switch, y = mean_rt)) +
+  ggplot(aes(x = Block, y = mean_rt)) +
   stat_summary(
     fun = mean, geom = "line", linewidth = 1.2,
-    aes(group = Block, colour = Block)
+    aes(group = Switch, colour = Switch)
   ) +
   stat_summary(
     fun = mean, geom = "point", size = 4, stroke = 1.1,
-    aes(group = Block, colour = Block, fill = Block, shape = Block)
+    aes(group = Switch, colour = Switch, fill = Switch, shape = Switch)
+    ) +
+  stat_summary(
+    geom = "errorbar", fun.data = mean_cl_boot, width = 0.05, linewidth = 1.3,
+    alpha = 0.7, aes(group = Switch, colour = Switch)
     ) +
   scale_fill_manual(values = stay_pal_fill) +
   scale_colour_manual(values = stay_pal_colour) +
-  scale_shape_manual(values = c("ST" = 21, "MT" = 24)) +
+  scale_shape_manual(values = c("Stay" = 21, "Switch" = 24)) +
   plot_style() +
   theme(
     axis.title = element_text(face = "bold"),
@@ -90,7 +95,7 @@ switch_stay_outless |>
     axis.title.y = element_text(margin = margin (r = 15)),
     axis.line = element_line(colour = "grey"),
     axis.ticks.x = element_blank(),
-    legend.position = "inside", legend.position.inside = c(0.73, 0.20),
+    legend.position = "inside", legend.position.inside = c(0.2, 0.55),
     legend.title = element_blank(),
     strip.background = element_rect(fill = "white", color = "white", linewidth = 0.5)
   ) +
@@ -100,14 +105,14 @@ switch_stay_outless |>
 
 
 ggsave(
-  "interaction_switch_mt.png",
+  "interaction_block_mt.png",
   path = ("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/plots/thesis"),
   width = 4,
   height = 4,
 )
 
 ggsave(
-  "interaction_switch_mt.svg",
+  "interaction_block_mt.svg",
   path = ("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/plots/thesis"),
   width = 4,
   height = 4,

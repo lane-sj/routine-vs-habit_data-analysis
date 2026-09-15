@@ -174,7 +174,41 @@ switch_stay_outless_log |>
   geom_boxplot() +
   theme_classic(base_size = 14)
 
-#test
+#FIRST CHECK MAIN EFFECTS AND INTERACTIONS
+
+afex_options(emmeans_model = "multivariate")
+
+mod <- aov_ez(
+  "sub",
+  "mean_rt",
+  switch_stay_outless_log,
+  within = c("block", "switch")
+)
+#the overall ANOVA shows sig effects at main effect response type and at
+#interaction of response type and block :)
+
+#define contrasts
+
+conts_1 <- list(
+  "mt-st" = c(-0.5, 0.5, -0.5, 0.5),
+  "switch-stay" = c(-0.5, -0.5, 0.5, 0.5),
+  "int" = c(0.5, -0.5, -0.5, 0.5)
+)
+
+emms_1 <- emmeans(mod, c("block", "switch"))
+
+cnt_res <- contrast(emms_1, conts_1)
+
+output <- psyci(
+  model = mod,
+  contrast_tables = cnt_res,
+  method = "ph",
+  family_list = list("w"),
+  within_factors = list("block", "switch"),
+  alpha = .05
+)
+
+#test simplefx
 afex_options(emmeans_model = "multivariate")
 
 mod_two <- aov_ez(
@@ -210,19 +244,31 @@ int <- contrast(emms, interaction = list(wthn_block, wthn_switch))
 #estimate mainfx of block and of switch, then combine contrasts tables together.
 all_fx = list(int, fx_block, fx_switch)
 
-family_list = list("ww","wblock","wswitch")
+fam_list = list("ww","wblock","wswitch")
 
 #get confidence intervals
 
-alpha <- 0.05 #check ph method later.
+alpha <- 3 * 0.05 #check ph method later.
 
 contrasts_w_cis = psyci(
   model = mod_two,
   contrast_tables = all_fx,
-  family_list = family_list,
+  family_list = fam_list,
   method = "ph",
   alpha = alpha
 )
 
 
+
+
+
+#####################################
+for_psy <- switch_stay_outless_log |>
+  pivot_wider(
+    names_from = c("block", "switch"),
+    values_from = mean_rt
+  ) |>
+  select(mt_0:st_0)
+
+write_tsv(for_psy, "for_psy.txt")
 
