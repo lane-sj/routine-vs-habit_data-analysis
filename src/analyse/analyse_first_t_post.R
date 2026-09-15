@@ -128,8 +128,6 @@ output <- psyci(
 
 
 # what about switch v stay first correct responses -----------------------------
-
-
 #tidy
 
 switch_stay_outless <- switch_stay_avg |>
@@ -177,7 +175,6 @@ switch_stay_outless_log |>
   theme_classic(base_size = 14)
 
 #test
-
 afex_options(emmeans_model = "multivariate")
 
 mod_two <- aov_ez(
@@ -186,20 +183,46 @@ mod_two <- aov_ez(
   switch_stay_outless_log,
   within = c("block", "switch")
 )
-                            #st    mt    st   mt
-                            #0     0     1    1
-wth_conts <- list(
-  "mt-st"               = c(-0.5, 0.5, -0.5, 0.5),
-  "switch-stay"         = c(-0.5, -0.5, 0.5, 0.5),
-  "int"                 = c(0.5, -0,5, -0.5, 0.5)
+
+emms <- emmeans(mod_two, c("block", "switch"))
+
+wthn_block <- list(
+  "mt-st" = c(-1, 1),
+  "mt*" = c(0, 1),
+  "st*" = c(1, 0)
 )
 
-emms_two <- emmeans(mod_two, c("block", "switch"))
+emms_block <- emmeans(mod_two, c("block"))
+fx_block <- contrast(emms_block, wthn_block[1])
 
-cnt_res_two <- contrast(emms_two, wth_conts)
+wthn_switch <- list(
+  "switch-stay" = c(-1, 1),
+  "switch*" = c(0, 1),
+  "stay*" = c(1, 0)
+)
 
-#produce simplefx
-#following
+emm_switch = emmeans(mod_two, c("switch"))
+fx_switch <- contrast(emms_block, wthn_switch[1])
+
+#interaction fx
+int <- contrast(emms, interaction = list(wthn_block, wthn_switch))
+
+#estimate mainfx of block and of switch, then combine contrasts tables together.
+all_fx = list(int, fx_block, fx_switch)
+
+family_list = list("ww","wblock","wswitch")
+
+#get confidence intervals
+
+alpha <- 0.05 #check ph method later.
+
+contrasts_w_cis = psyci(
+  model = mod_two,
+  contrast_tables = all_fx,
+  family_list = family_list,
+  method = "ph",
+  alpha = alpha
+)
 
 
 
