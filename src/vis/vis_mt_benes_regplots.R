@@ -39,7 +39,7 @@ perform_dat |>
   annotate(
     geom = "text",
     size = 4.3,
-    x = 0.4,
+    x = 1.5,
     y = -180,
     fontface = "italic",
     label = "r = -.171"
@@ -149,7 +149,7 @@ perform_dat |>
   annotate(
     geom = "text",
     size = 4.3,
-    x = 0.4,
+    x = 1.5,
     y = -1.6,
     fontface = "italic",
     label = "r = -.010"
