@@ -24,10 +24,10 @@ perform_dat |>
   mutate(
     RT_cost = RT_cost * 1000
   ) |>
-  ggplot(aes(x = sqrt(reclicks_mean), y = RT_cost)) +
+  ggplot(aes(x = reclicks_mean, y = RT_cost)) +
   geom_point(shape = 21, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   geom_smooth(method = 'lm', formula = 'y ~ x', se = F, colour = "#1F78B4FF") +
-  scale_x_continuous(limits = c(0, 2.5)) +
+  #scale_x_continuous(limits = c(0, 3)) +
   plot_style() +
   theme(
     axis.title = element_text(face = "bold"),
@@ -135,7 +135,7 @@ ggsave(
 
 #reclicks
 perform_dat |>
-  ggplot(aes(x = sqrt(reclicks_mean), y = tj_cost)) +
+  ggplot(aes(x = reclicks_mean, y = tj_cost)) +
   geom_point(shape = 21, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   geom_smooth(method = 'lm', formula = 'y ~ x', se = F, colour = "#33A02CFF") +
   plot_style() +
