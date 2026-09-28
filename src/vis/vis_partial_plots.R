@@ -76,6 +76,7 @@ reclicks_x_errors |>
     axis.title.y = element_text(margin = margin (r = 15)),
     axis.line = element_line(colour = "grey"),
     axis.ticks = element_line(colour = "grey"),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
@@ -88,7 +89,8 @@ reclicks_x_errors |>
   labs(
     y = "Reclicks | TE",
     x = "All Errors | TE"
-  )
+  ) +
+  coord_cartesian(clip = "off")
 
 ggsave(
   "reclicks_x_errors_partial.png",
