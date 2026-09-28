@@ -16,13 +16,16 @@ setwd("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/res")
 
 #read in data
 averages <- read_csv(
-  "averages_no_n_nc_no_nback_outs.csv",
+  "routine_vs_habit_avg.csv",
   na = c("", "NA")
 )
 # tidy --------------------------------------------------------------------
+remove <- c(8, 9, 11, 13, 22, 25, 28, 51, 61, 73, 76, 85)
+
 
 graph_ts <- averages |>
-  filter(ses == 4, switch == 0) |>
+  filter(ses == 4) |>
+  filter(!sub %in% remove) |>
   group_by(sub, block) |>
   mutate(
     block = factor(block, c("st", "mt"), c("ST", "MT"))
@@ -32,6 +35,7 @@ graph_ts <- averages |>
     tj_mean = mean(task_jumps_mean),
     ges_mean = mean(general_errors_mean),
   )
+
 
 # plot --------------------------------------------------------------------
 pal_fill <- c("#A6CEE390", "#1F78B490", "#B2DF8A90", "#33A02C90", "#FDBF6F90", "#FF7F0090")
@@ -73,7 +77,7 @@ graph_ts |>
     strip.background = element_rect(fill = "white", color = "white", linewidth = 0.5)
   ) +
   labs(
-    y = "Mean RT (ms)"
+    y = "RT (ms)"
   )
 
 ggsave(
@@ -102,10 +106,6 @@ graph_ts |>
   ) +
   stat_summary(fun = "mean", geom = "point", fill = "black", colour = "black", size = 2.5) +
   stat_summary(geom = "errorbar", fun.data = mean_cl_boot, width = 0, size = 1.3) +
-  geom_signif(
-    data = graph_ts, comparisons = list(c("ST","MT")),
-    annotation = "***", margin_top = 0.1, size = 1.2, textsize = 10, vjust = 0.5
-  ) +
   scale_fill_manual(values = tj_pal_fill) +
   scale_colour_manual(values = tj_pal_colour) +
   geom_line(aes(group = sub), alpha = 0.4, colour = "grey", position = position_dodge(width = 0.5)) +
@@ -121,7 +121,7 @@ graph_ts |>
     strip.background = element_rect(fill = "white", color = "white", linewidth = 0.5)
   ) +
   labs(
-    y = "Mean Task Jumps"
+    y = "Task Jumps"
   )
 
 ggsave(
@@ -141,9 +141,6 @@ ggsave(
  ####################
 
 #finally gen errors
-#also ns
-#and same outliers excluded
-
 
 graph_ts |>
   ggplot(aes(x = block, y = ges_mean)) +
@@ -154,10 +151,6 @@ graph_ts |>
   ) +
   stat_summary(fun = "mean", geom = "point", fill = "black", colour = "black", size = 2.5) +
   stat_summary(geom = "errorbar", fun.data = mean_cl_boot, width = 0, size = 1.3) +
-  geom_signif(
-    data = graph_ts, comparisons = list(c("ST","MT")),
-    annotation = "*", margin_top = 1.2, size = 1.5, textsize = 10, vjust = 0.1
-  ) +
   scale_fill_manual(values = ge_pal_fill) +
   scale_colour_manual(values = ge_pal_colour) +
   geom_line(aes(group = sub), alpha = 0.4, colour = "grey", position = position_dodge(width = 0.5)) +
@@ -173,7 +166,7 @@ graph_ts |>
     strip.background = element_rect(fill = "white", color = "white", linewidth = 0.5)
   ) +
   labs(
-    y = "Mean General Errors"
+    y = "General Errors"
   )
 
 ggsave(
