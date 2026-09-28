@@ -48,7 +48,7 @@ partial |>
     x = 0.3,
     y = 5,
     fontface = "italic",
-    label = "r = -.302, p = .010"
+    label = "r = -.289, p = .008"
   ) +
   labs(
     x = "TE | All Errors",
@@ -83,7 +83,7 @@ reclicks_x_errors |>
     x = 0.25,
     y = 5,
     fontface = "italic",
-    label = "r = -.144, p = .226"
+    label = "r = -.143, p = .195"
   ) +
   labs(
     y = "Reclicks | TE",

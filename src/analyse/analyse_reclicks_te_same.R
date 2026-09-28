@@ -12,7 +12,7 @@ setwd("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/res")
 
 #read in data
 split_by_block <- read_csv(
-  "split_by_block.csv",
+  "split_by_block_all.csv",
   na = c("", "NA")
 )
 
