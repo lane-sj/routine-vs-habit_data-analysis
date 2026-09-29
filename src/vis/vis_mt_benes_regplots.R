@@ -46,7 +46,7 @@ perform_dat |>
   ) +
   labs(
     y = "RT Cost (ms; MT - ST)",
-    x = "Mean Reclicks"
+    x = "Reclicks"
   )
 
 ggsave(
@@ -82,7 +82,7 @@ perform_dat |>
   ) +
   labs(
     y = "RT Cost (MT - ST)",
-    x = "Mean TE"
+    x = "TE"
   )
 
 ggsave(
@@ -92,7 +92,7 @@ ggsave(
   width = 4
 )
 
-
+#ges
 perform_dat |>
   ggplot(aes(x = ge_stay, y = RT_cost)) +
   geom_point(shape = 24, size = 3.2, stroke = 1.1, fill = "#899DA495", colour = "black") +
@@ -105,7 +105,8 @@ perform_dat |>
     axis.title.y = element_blank(),
     axis.line.y = element_blank(),
     axis.ticks.y = element_blank(),
-    axis.text.y = element_blank()
+    axis.text.y = element_blank(),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
@@ -117,7 +118,7 @@ perform_dat |>
   ) +
   labs(
     y = "RT Cost (MT - ST)",
-    x = "Mean General Errors"
+    x = "General Errors"
   )
 
 ggsave(
@@ -156,7 +157,7 @@ perform_dat |>
   ) +
   labs(
     y = "Task Jump Cost (MT - ST)",
-    x = "Mean Reclicks"
+    x = "Reclicks"
   )
 
 ggsave(
@@ -192,7 +193,7 @@ perform_dat |>
   ) +
   labs(
     y = "RT Cost (MT - ST)",
-    x = "Mean TE"
+    x = "TE"
   )
 
 ggsave(
@@ -215,7 +216,8 @@ perform_dat |>
     axis.title.y = element_blank(),
     axis.line.y = element_blank(),
     axis.ticks.y = element_blank(),
-    axis.text.y = element_blank()
+    axis.text.y = element_blank(),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
@@ -227,13 +229,13 @@ perform_dat |>
   ) +
   labs(
     y = "RT Cost (MT - ST)",
-    x = "Mean General Errors"
+    x = "General Errors"
   )
 
 ggsave(
   "TJcost_x_errors.png",
   path = ("C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/plots/thesis"),
   height = 4,
-  width = 4.3
+  width = 4
 )
 

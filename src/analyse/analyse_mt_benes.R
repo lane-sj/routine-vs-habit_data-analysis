@@ -34,20 +34,35 @@ rtcost_trsf_mod <- lm(RT_cost ~ TE + sqrt(reclicks_mean), data = perform_dat)
 summary(rtcost_trsf_mod)
 #ns
 
+rtcost_mod <- lm(RT_cost ~ TE + reclicks_mean, data = perform_dat)
+summary(rtcost_mod)
+#ns
+
 tjcost_trsf_mod <- lm(tj_cost ~ TE + sqrt(reclicks_mean), data = perform_dat)
 summary(tjcost_trsf_mod)
 #ns
+
+tjcost_mod <- lm(tj_cost ~ TE + reclicks_mean, data = perform_dat)
+summary(tjcost_mod)
+#
 
 # TE, reclicks and general errors ----------------------------------------
 
 rtcost_trsf <- lm(RT_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = perform_dat)
 summary(rtcost_trsf)
-#ns overall, sig on reclicks as predictor (but only without sub 30)
+#ns
+
+rtcost <- lm(RT_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat)
+summary(rtcost)
+#ns
 
 tjcost_trsf <- lm(tj_cost ~ TE + sqrt(reclicks_mean) + ge_stay, data = perform_dat)
 summary(tjcost_trsf)
 #ns
 
+tjcost <- lm(tj_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat)
+summary(tjcost)
+#ns
 
 # correlations ------------------------------------------------------------
 
@@ -80,4 +95,10 @@ with(perform_dat, cor(TE, tj_cost))
 with(perform_dat, cor(ge_stay, tj_cost))
 
 
+
+# sub 30 exclusion criteria -----------------------------------------------
+
+summary(perform_dat$reclicks_mean)
+
+sd(perform_dat$reclicks_mean) * 2.5
 
