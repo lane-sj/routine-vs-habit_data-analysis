@@ -37,7 +37,16 @@ df_test <- split_by_block |>
 
 # analyse -----------------------------------------------------------------
 
-#transforms first
+#no transforms reclicks
+rclck_mt_st <- with(df_test, t.test(reclicks_mean_st, reclicks_mean_mt, paired = T))
+rclck_mt_st <- tidy(rclck_mt_st)
+
+write_csv(
+  rclck_mt_st,
+  "C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/res/analysis/rclck_mt_st.csv"
+)
+
+#transforms
 
 trsf_rclck_mt_st <- with(df_test, t.test(sqrt(reclicks_mean_st), reclicks_mean_mt, paired = T))
 trsf_rclck_mt_st <- tidy(trsf_rclck_mt_st)
@@ -64,3 +73,17 @@ write_csv(
   TE_mt_st,
   "C:/Users/Sadie/Repos/routine-vs-habit_data-analysis/res/analysis/t_test_TE_mt_st.csv"
 )
+
+
+# get summary stats -------------------------------------------------------
+
+summary(df_test)
+
+df_test |>
+  summarise(
+    sd_reclicks_mt = sd(reclicks_mean_mt),
+    sd_reclicks_st = sd(reclicks_mean_st),
+    sd_TE_mt = sd(TE_mt),
+    sd_TE_st = sd(TE_st)
+  )
+
