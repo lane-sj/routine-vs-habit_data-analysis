@@ -340,10 +340,3 @@ ggsave(
   height = 6,
 )
 
-#testing TE stuff
--(2*(0.25*log(0.5)) + 2*(0.25*log(1))) #sequence 2-4-11-2-9
--(2*(1/6*log(0.5)) + 4*(1/6*log(1)))   #sequence 2-4-6-8-11-2-9
-
-#tes are not the same bc of the weighting from occupancy matrix
-#so must be just as consistent, AND just as long?
-
