@@ -51,8 +51,8 @@ partial |>
     label = "r = -.289, p = .008"
   ) +
   labs(
-    x = "TE | All Errors",
-    y = "Reclicks | All Errors"
+    x = "TE | Performance Errors",
+    y = "Reclicks | Performance Errors"
   )
 
 ggsave(
@@ -88,7 +88,7 @@ reclicks_x_errors |>
   ) +
   labs(
     y = "Reclicks | TE",
-    x = "All Errors | TE"
+    x = "Performance Errors | TE"
   ) +
   coord_cartesian(clip = "off")
 
