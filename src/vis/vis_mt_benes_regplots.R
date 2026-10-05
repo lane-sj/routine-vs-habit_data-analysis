@@ -35,14 +35,15 @@ perform_dat |>
     axis.title.y = element_text(margin = margin (r = 15)),
     axis.line = element_line(colour = "grey"),
     axis.ticks = element_line(colour = "grey"),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
     size = 4.3,
-    x = 1.5,
+    x = 2.5,
     y = -180,
     fontface = "italic",
-    label = "r = -.171"
+    label = "r = -.171, p = .201"
   ) +
   labs(
     y = "RT Cost (ms; MT - ST)",
@@ -58,6 +59,9 @@ ggsave(
 
 #TE
 perform_dat |>
+  mutate(
+    RT_cost = RT_cost * 1000
+  ) |>
   ggplot(aes(x = TE, y = RT_cost)) +
   geom_point(shape = 23, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   geom_smooth(method = 'lm', formula = 'y ~ x', se = F, colour = "#1F78B4FF") +
@@ -70,15 +74,16 @@ perform_dat |>
     axis.title.y = element_blank(),
     axis.line.y = element_blank(),
     axis.ticks.y = element_blank(),
-    axis.text.y = element_blank()
+    axis.text.y = element_blank(),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
     size = 4.3,
-    x = 0.15,
-    y = -0.18,
+    x = 0.25,
+    y = -180,
     fontface = "italic",
-    label = "r = .083"
+    label = "r = .083, p = .802"
   ) +
   labs(
     y = "RT Cost (MT - ST)",
@@ -94,8 +99,11 @@ ggsave(
 
 #ges
 perform_dat |>
+  mutate(
+    RT_cost = RT_cost * 1000
+  ) |>
   ggplot(aes(x = ge_stay, y = RT_cost)) +
-  geom_point(shape = 24, size = 3.2, stroke = 1.1, fill = "#899DA495", colour = "black") +
+  geom_point(shape = 24, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   plot_style() +
   theme(
     axis.title = element_text(face = "bold"),
@@ -112,9 +120,9 @@ perform_dat |>
     geom = "text",
     size = 4.3,
     x = 0.04,
-    y = -0.18,
+    y = -180,
     fontface = "italic",
-    label = "r = -.016"
+    label = "r = -.016, p = .757"
   ) +
   labs(
     y = "RT Cost (MT - ST)",
@@ -146,14 +154,15 @@ perform_dat |>
     axis.title.y = element_text(margin = margin (r = 15)),
     axis.line = element_line(colour = "grey"),
     axis.ticks = element_line(colour = "grey"),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
     size = 4.3,
-    x = 1.5,
+    x = 2.5,
     y = -1.6,
     fontface = "italic",
-    label = "r = -.010"
+    label = "r = -.010, p = .799"
   ) +
   labs(
     y = "Task Jump Cost (MT - ST)",
@@ -181,15 +190,16 @@ perform_dat |>
     axis.title.y = element_blank(),
     axis.line.y = element_blank(),
     axis.ticks.y = element_blank(),
-    axis.text.y = element_blank()
+    axis.text.y = element_blank(),
+    plot.margin = margin(t = 15, r = 15, b = 15, l = 15, unit = "pt")
   ) +
   annotate(
     geom = "text",
     size = 4.3,
-    x = 0.15,
+    x = 0.25,
     y = -1.6,
     fontface = "italic",
-    label = "r = .186"
+    label = "r = .186, p = .285"
   ) +
   labs(
     y = "RT Cost (MT - ST)",
@@ -206,7 +216,7 @@ ggsave(
 
 perform_dat |>
   ggplot(aes(x = ge_stay, y = tj_cost)) +
-  geom_point(shape = 24, size = 3.2, stroke = 1.1, fill = "#899DA495", colour = "black") +
+  geom_point(shape = 24, size = 3.5, stroke = 1.1, fill = "#899DA495", colour = "black") +
   plot_style() +
   theme(
     axis.title = element_text(face = "bold"),
@@ -225,7 +235,7 @@ perform_dat |>
     x = 0.04,
     y = -1.6,
     fontface = "italic",
-    label = "r = .259"
+    label = "r = .259, p = .051"
   ) +
   labs(
     y = "RT Cost (MT - ST)",
