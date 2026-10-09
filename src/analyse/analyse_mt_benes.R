@@ -113,3 +113,12 @@ mt_tjcost_mod <- lm(tj_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat_m
 summary(mt_tjcost_mod)
 #
 
+
+# no thirty ---------------------------------------------------------------
+
+
+nothirty_rtcost <- lm(RT_cost ~ TE + reclicks_mean + ge_stay, data = no_thirty)
+summary(nothirty_rtcost)
+
+nothirty_tjcost <- lm(tj_cost ~ TE + reclicks_mean + ge_stay, data = no_thirty)
+summary(nothirty_tjcost)
