@@ -102,3 +102,14 @@ summary(perform_dat$reclicks_mean)
 
 sd(perform_dat$reclicks_mean) * 2.5
 
+
+
+# check mt ----------------------------------------------------------------
+
+mt_rtcost_mod <- lm(RT_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat_mt)
+summary(mt_rtcost_mod)
+
+mt_tjcost_mod <- lm(tj_cost ~ TE + reclicks_mean + ge_stay, data = perform_dat_mt)
+summary(mt_tjcost_mod)
+#
+
